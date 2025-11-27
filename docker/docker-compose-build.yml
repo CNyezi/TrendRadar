@@ -4,6 +4,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     container_name: trend-radar
+    image: holtye/trendradar:latest
     restart: unless-stopped
 
     ports:
