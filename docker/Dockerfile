@@ -52,10 +52,12 @@ RUN set -ex && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
+COPY pyproject.toml .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
 COPY docker/manage.py .
+COPY mcp_server/ ./mcp_server/
 
 # 复制 entrypoint.sh 并强制转换为 LF 格式
 COPY docker/entrypoint.sh /entrypoint.sh.tmp
@@ -67,6 +69,10 @@ RUN sed -i 's/\r$//' /entrypoint.sh.tmp && \
 
 ENV PYTHONUNBUFFERED=1 \
     CONFIG_PATH=/app/config/config.yaml \
-    FREQUENCY_WORDS_PATH=/app/config/frequency_words.txt
+    FREQUENCY_WORDS_PATH=/app/config/frequency_words.txt \
+    MCP_HOST=0.0.0.0 \
+    MCP_PORT=3333
+
+EXPOSE 3333
 
 ENTRYPOINT ["/entrypoint.sh"]

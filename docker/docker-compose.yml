@@ -1,8 +1,11 @@
 services:
   trend-radar:
-    image: wantcat/trendradar:latest
+    image: holtye/trendradar:latest
     container_name: trend-radar
     restart: unless-stopped
+
+    ports:
+      - "${MCP_PORT:-3333}:3333"
 
     volumes:
       - ../config:/app/config:ro
@@ -47,3 +50,7 @@ services:
       - CRON_SCHEDULE=${CRON_SCHEDULE:-*/5 * * * *}
       - RUN_MODE=${RUN_MODE:-cron}
       - IMMEDIATE_RUN=${IMMEDIATE_RUN:-true}
+      # MCP 服务配置
+      - ENABLE_MCP=${ENABLE_MCP:-true}
+      - MCP_HOST=${MCP_HOST:-0.0.0.0}
+      - MCP_PORT=${MCP_PORT:-3333}
